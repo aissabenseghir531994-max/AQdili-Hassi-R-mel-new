@@ -18,7 +18,17 @@ button:disabled{opacity:.6}
 #message{text-align:center;margin-top:15px;line-height:1.8}
 </style>
 </head>
-
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register(
+      "/AQdili-Hassi-R-mel-new/service-worker.js"
+    ).catch(function (error) {
+      console.error("Service worker registration failed:", error);
+    });
+  });
+}
+</script>
 <body>
 <header>
 <h1>🛵 اقضيلي حاسي الرمل</h1>
