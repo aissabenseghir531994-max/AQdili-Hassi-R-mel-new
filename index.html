@@ -29,7 +29,114 @@ if ("serviceWorker" in navigator) {
   });
 }
 </script>
-<body>
+<!-- نافذة تثبيت تطبيق اقضيلي -->
+<style>
+#installOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#installBox {
+  background: white;
+  width: 100%;
+  max-width: 360px;
+  padding: 25px 20px;
+  border-radius: 20px;
+  text-align: center;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+#installBox h2 {
+  color: #087f5b;
+  margin-top: 0;
+}
+
+#installBox p {
+  line-height: 1.8;
+  color: #444;
+}
+
+.installBtn {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #087f5b;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#continueBtn {
+  background: #eeeeee;
+  color: #333;
+}
+</style>
+
+<div id="installOverlay">
+  <div id="installBox">
+    <div style="font-size:55px">🛵</div>
+
+    <h2>اقضيلي حاسي الرمل</h2>
+
+    <p>
+      📲 ثبّت تطبيقنا على هاتفك<br>
+      واطلب توصيلك بسهولة أينما كنت داخل حاسي الرمل.
+    </p>
+
+    <button id="installBtn" class="installBtn">
+      📲 تثبيت التطبيق
+    </button>
+
+    <button id="continueBtn" class="installBtn">
+      متابعة إلى الموقع
+    </button>
+  </div>
+</div>
+
+<script>
+(function () {
+  const overlay = document.getElementById("installOverlay");
+  const installBtn = document.getElementById("installBtn");
+  const continueBtn = document.getElementById("continueBtn");
+
+  let installPrompt = null;
+
+  window.addEventListener("beforeinstallprompt", function(event) {
+    event.preventDefault();
+    installPrompt = event;
+  });
+
+  installBtn.addEventListener("click", async function() {
+    if (installPrompt) {
+      installPrompt.prompt();
+      await installPrompt.userChoice;
+      installPrompt = null;
+    } else {
+      alert(
+        "لتثبيت التطبيق: افتح قائمة Chrome ⋮، ثم اختر «إضافة إلى الشاشة الرئيسية» أو «تثبيت التطبيق» إذا ظهر الخيار."
+      );
+    }
+  });
+
+  continueBtn.addEventListener("click", function() {
+    overlay.style.display = "none";
+  });
+})();
+</script>
+  <body>
 <header>
 <h1>🛵 اقضيلي حاسي الرمل</h1>
 <p>خدمات التوصيل إلى غاية باب دارك</p>
