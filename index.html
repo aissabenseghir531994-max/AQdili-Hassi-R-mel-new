@@ -3,343 +3,407 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>اقضيلي حاسي الرمل</title>
-<link rel="manifest" href="/AQdili-Hassi-R-mel-new/manifest.json">
 <meta name="theme-color" content="#087f5b">
+<meta name="description" content="تطبيق اقضيلي حاسي الرمل لخدمات التوصيل والطلبات">
+<title>اقضيلي حاسي الرمل</title>
+
+<link rel="manifest" href="./manifest.json">
+
 <style>
-body{font-family:Arial,sans-serif;background:#f3f5f7;margin:0;color:#222}
-header{background:#087f5b;color:white;padding:24px 15px;text-align:center}
-main{max-width:500px;margin:20px auto;padding:15px}
-.card{background:white;padding:20px;border-radius:14px;box-shadow:0 2px 8px #ddd}
-label{display:block;margin-top:14px;font-weight:bold}
-input,select,textarea{width:100%;box-sizing:border-box;padding:12px;margin-top:6px;border:1px solid #ccc;border-radius:8px;font-size:16px}
-button{width:100%;padding:14px;margin-top:18px;background:#087f5b;color:white;border:0;border-radius:8px;font-size:17px}
-button:disabled{opacity:.6}
-.note{text-align:center;color:#666;font-size:14px}
-#message{text-align:center;margin-top:15px;line-height:1.8}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,Tahoma,sans-serif;
+  background:#f2f5f3;
+  color:#18352b;
+}
+header{
+  background:#087f5b;
+  color:white;
+  text-align:center;
+  padding:25px 15px;
+  border-radius:0 0 25px 25px;
+}
+header h1{margin:0 0 10px;font-size:27px}
+header p{margin:0;font-size:15px}
+.container{max-width:600px;margin:auto;padding:15px}
+.card{
+  background:white;
+  padding:18px;
+  margin:15px 0;
+  border-radius:16px;
+  box-shadow:0 3px 12px #0000000d;
+}
+h2{font-size:20px;margin-top:0;color:#087f5b}
+label{display:block;margin:13px 0 6px;font-weight:bold}
+input,select,textarea{
+  width:100%;
+  padding:13px;
+  border:1px solid #ccd8d1;
+  border-radius:9px;
+  font-size:16px;
+  background:white;
+}
+textarea{min-height:80px;resize:vertical}
+button{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:10px;
+  background:#087f5b;
+  color:white;
+  font-size:17px;
+  font-weight:bold;
+  margin-top:12px;
+  cursor:pointer;
+}
+button.secondary{background:#e8f5ee;color:#087f5b}
+button.danger{background:#b42318}
+.notice{
+  background:#e8f5ee;
+  padding:12px;
+  border-radius:10px;
+  line-height:1.8;
+  font-size:14px;
+}
+.price{
+  text-align:center;
+  background:#e8f5ee;
+  padding:15px;
+  border-radius:12px;
+  margin-top:15px;
+}
+.price strong{font-size:25px;color:#087f5b}
+.order{
+  border:1px solid #dbe5de;
+  border-radius:10px;
+  padding:12px;
+  margin:12px 0;
+  line-height:1.8;
+  overflow-wrap:anywhere;
+}
+.small{font-size:13px;color:#66756d}
+footer{text-align:center;padding:20px;color:#66756d}
+.hidden{display:none}
 </style>
 </head>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function () {
-    navigator.serviceWorker.register(
-      "/AQdili-Hassi-R-mel-new/service-worker.js"
-    ).catch(function (error) {
-      console.error("Service worker registration failed:", error);
-    });
-  });
-}
-</script>
-<style>
-#installOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.65);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 99999;
-  padding: 20px;
-  box-sizing: border-box;
-}
 
-#installBox {
-  background: white;
-  width: 100%;
-  max-width: 360px;
-  padding: 25px 20px;
-  border-radius: 20px;
-  text-align: center;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
+<body>
 
-#installBox h2 {
-  color: #087f5b;
-  margin-top: 0;
-}
-
-#installBox p {
-  line-height: 1.8;
-  color: #444;
-}
-
-.installBtn {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 14px;
-  margin-top: 12px;
-  border: none;
-  border-radius: 10px;
-  background: #087f5b;
-  color: white;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-#continueBtn {
-  background: #eeeeee;
-  color: #333;
-}
-</style>
-
-<div id="installOverlay">
-  <div id="installBox">
-    <div style="font-size:55px">🛵</div>
-
-    <h2>اقضيلي حاسي الرمل</h2>
-
-    <p>
-      📲 ثبّت تطبيقنا على هاتفك<br>
-      واطلب توصيلك بسهولة أينما كنت داخل حاسي الرمل.
-    </p>
-
-    <button id="installBtn" class="installBtn">
-      📲 تثبيت التطبيق
-    </button>
-
-    <button id="continueBtn" class="installBtn">
-      متابعة إلى الموقع
-    </button>
-  </div>
-</div>
-
-<script>
-(function () {
-  const overlay = document.getElementById("installOverlay");
-  const installBtn = document.getElementById("installBtn");
-  const continueBtn = document.getElementById("continueBtn");
-
-  let installPrompt = null;
-
-  window.addEventListener("beforeinstallprompt", function(event) {
-    event.preventDefault();
-    installPrompt = event;
-  });
-
-  installBtn.addEventListener("click", async function() {
-    if (installPrompt) {
-      installPrompt.prompt();
-      await installPrompt.userChoice;
-      installPrompt = null;
-    } else {
-      alert(
-        "لتثبيت التطبيق: افتح قائمة Chrome ⋮، ثم اختر «إضافة إلى الشاشة الرئيسية» أو «تثبيت التطبيق» إذا ظهر الخيار."
-      );
-    }
-  });
-
-  continueBtn.addEventListener("click", function() {
-    overlay.style.display = "none";
-  });
-})();
-</script>
-  <body>
 <header>
-<h1>🛵 اقضيلي حاسي الرمل</h1>
-<p>خدمات التوصيل إلى غاية باب دارك</p>
+  <h1>🛵 اقضيلي حاسي الرمل</h1>
+  <p>نقضيلك ونوصلك حتى لباب دارك</p>
 </header>
 
-<main>
-<div class="card">
-<h2>📦 اطلب توصيلك</h2>
+<main class="container">
 
-<form id="orderForm">
+<section class="card">
+  <h2>📦 اطلب خدمة التوصيل</h2>
+  <div class="notice">
+    خدمة التوصيل داخل حاسي الرمل. املأ معلوماتك وتفاصيل طلبك.
+    لا نقبل طلبات التبغ أو الشمة.
+  </div>
 
-<label>الاسم</label>
-<input id="name" required placeholder="اكتب اسمك">
+  <form id="orderForm">
+    <label for="customer">الاسم الكامل</label>
+    <input id="customer" required maxlength="80" placeholder="اكتب اسمك">
 
-<label>رقم الهاتف</label>
-<input id="phone" type="tel" required placeholder="05 أو 06 أو 07">
+    <label for="phone">رقم الهاتف</label>
+    <input id="phone" type="tel" required maxlength="20"
+      placeholder="مثال: 06xxxxxxxx">
 
-<label>نوع الطلب</label>
-<select id="type" required>
-<option value="">اختر نوع الطلب</option>
-<option>مشتريات من المحل</option>
-<option>وجبة أو مأكولات</option>
-<option>أدوية ومنتجات صيدلية</option>
-<option>وثائق وأغراض أخرى</option>
-</select>
+    <label for="service">نوع الخدمة</label>
+    <select id="service" required>
+      <option value="">اختر الخدمة</option>
+      <option value="شراء أغراض من المحل">شراء أغراض من المحل</option>
+      <option value="توصيل الطعام">توصيل الطعام</option>
+      <option value="توصيل المشتريات">توصيل المشتريات</option>
+      <option value="شراء أدوية بوصفة عند الحاجة">شراء أدوية</option>
+      <option value="خدمة أخرى">خدمة أخرى</option>
+    </select>
 
-<label>ماذا تريد؟</label>
-<textarea id="details" required placeholder="اكتب تفاصيل طلبك"></textarea>
+    <label for="shop">المحل أو مكان أخذ الطلب</label>
+    <input id="shop" required maxlength="150"
+      placeholder="اسم المحل أو العنوان">
 
-<label>عنوان التوصيل</label>
-<input id="address" required placeholder="الحي والشارع">
+    <label for="address">عنوان التوصيل</label>
+    <input id="address" required maxlength="200"
+      placeholder="الحي والشارع">
 
-<label>ملاحظات إضافية (اختياري)</label>
-<textarea id="notes" placeholder="أي معلومات إضافية"></textarea>
+    <label for="distance">المسافة التقريبية بالكيلومتر</label>
+    <input id="distance" type="number" min="0" max="100"
+      step="0.5" value="2" required>
 
-<button id="submitBtn" type="submit">إرسال الطلب</button>
-</form>
+    <label for="details">تفاصيل الطلب</label>
+    <textarea id="details" required maxlength="1000"
+      placeholder="اكتب الأغراض التي تريد شراءها"></textarea>
 
-<p class="note">خدمة التوصيل داخل حاسي الرمل فقط.</p>
-<p id="message" role="status"></p>
-</div>
+    <div class="price">
+      <div>سعر التوصيل التقريبي</div>
+      <strong><span id="price">150</span> دج</strong>
+      <div class="small">السعر تقديري ويؤكد قبل تنفيذ الطلب.</div>
+    </div>
+
+    <button type="submit">تأكيد الطلب</button>
+  </form>
+  <p id="formMessage" role="status"></p>
+</section>
+
+<section class="card">
+  <h2>📲 تثبيت التطبيق</h2>
+  <p>يمكنك تثبيت التطبيق على هاتفك إذا كان المتصفح يدعم التثبيت.</p>
+  <button id="installBtn" class="secondary" type="button">
+    تثبيت التطبيق
+  </button>
+  <p id="installMessage" class="small"></p>
+</section>
+
+<section class="card">
+  <h2>🔐 لوحة الطلبات</h2>
+  <p class="small">
+    هذه اللوحة تعرض الطلبات المحفوظة على هذا الجهاز فقط.
+    ليست لوحة استقبال مركزية لطلبات جميع الزبائن.
+  </p>
+
+  <label for="adminPin">رمز الدخول المحلي</label>
+  <input id="adminPin" type="password" placeholder="أدخل رمز الدخول">
+
+  <button id="showOrdersBtn" type="button">عرض الطلبات المحلية</button>
+  <button id="hideOrdersBtn" class="secondary" type="button">
+    إخفاء الطلبات
+  </button>
+
+  <div id="ordersPanel" class="hidden">
+    <div id="ordersList"></div>
+    <button id="exportBtn" class="secondary" type="button">
+      تصدير الطلبات كملف
+    </button>
+    <button id="clearBtn" class="danger" type="button">
+      حذف الطلبات المحلية
+    </button>
+  </div>
+  <p class="small">
+    غيّر رمز الدخول داخل الكود قبل النشر، ولا تعتبره حماية آمنة لبيانات حساسة.
+  </p>
+</section>
+
 </main>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCQ45cs4mo3HyjtWAyLbVsh0DglUosoiv0",
-  authDomain: "aqdili-hassi-r-mel.firebaseapp.com",
-  projectId: "aqdili-hassi-r-mel",
-  storageBucket: "aqdili-hassi-r-mel.firebasestorage.app",
-  messagingSenderId: "1098910384011",
-  appId: "1:1098910384011:web:4bdcfe04af98a0eff2398e",
-  measurementId: "G-TSTBHVWBNJ"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const form = document.getElementById("orderForm");
-const message = document.getElementById("message");
-const button = document.getElementById("submitBtn");
-
-form.addEventListener("submit", async function(e) {
-  e.preventDefault();
-
-  const order = {
-    name: document.getElementById("name").value.trim(),
-    phone: document.getElementById("phone").value.trim(),
-    type: document.getElementById("type").value,
-    details: document.getElementById("details").value.trim(),
-    address: document.getElementById("address").value.trim(),
-    notes: document.getElementById("notes").value.trim(),
-    status: "جديد",
-    createdAt: serverTimestamp()
-  };
-
-  const whatsappText =
-    `طلب جديد - اقضيلي حاسي الرمل\n` +
-    `الاسم: ${order.name}\n` +
-    `الهاتف: ${order.phone}\n` +
-    `النوع: ${order.type}\n` +
-    `الطلب: ${order.details}\n` +
-    `العنوان: ${order.address}\n` +
-    `ملاحظات: ${order.notes}`;
-
-  const whatsappURL =
-    "https://wa.me/213671832087?text=" +
-    encodeURIComponent(whatsappText);
-
-  button.disabled = true;
-  button.textContent = "جاري تسجيل الطلب...";
-  message.textContent = "";
-
-  try {
-    await addDoc(collection(db, "orders"), order);
-
-    message.textContent =
-      "✅ تم حفظ طلبك بنجاح! اضغط أدناه لإرساله عبر واتساب.";
-
-    message.style.color = "green";
-
-    const link = document.createElement("a");
-    link.href = whatsappURL;
-    link.target = "_blank";
-    link.rel = "noopener";
-    link.textContent = "📲 إرسال الطلب عبر واتساب";
-    link.style.display = "block";
-    link.style.marginTop = "12px";
-    link.style.fontWeight = "bold";
-    link.style.color = "#087f5b";
-
-    message.appendChild(document.createElement("br"));
-    message.appendChild(link);
-
-    form.reset();
-
-  } catch (error) {
-    console.error(error);
-
-    message.textContent =
-      "❌ تعذر حفظ الطلب. تحقق من اتصال الإنترنت وإعدادات Firebase ثم حاول مجددًا.";
-
-    message.style.color = "red";
-
-  } finally {
-    button.disabled = false;
-    button.textContent = "إرسال الطلب";
-  }
-});
-</script>
-<style>
-#installAppBtn {
-  position: fixed;
-  bottom: 12px;
-  left: 12px;
-  right: 12px;
-  z-index: 99999;
-  width: calc(100% - 24px);
-  padding: 16px;
-  border: none;
-  border-radius: 12px;
-  background: #087f5b;
-  color: white;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 12px #0003;
-}
-<style>
-#installAppBtn {
-  position: fixed;
-  bottom: 12px;
-  left: 12px;
-  right: 12px;
-  width: calc(100% - 24px);
-  padding: 16px;
-  background: #087f5b;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 18px;
-  font-weight: bold;
-  z-index: 99999;
-  box-shadow: 0 4px 12px #0003;
-}
-</style>
-
-
-</button>
+<footer>
+  اقضيلي حاسي الرمل © 2026
+</footer>
 
 <script>
-(function () {
-  const btn = document.getElementById("installAppBtn");
-  let installPrompt = null;
+"use strict";
 
-  window.addEventListener("beforeinstallprompt", function (event) {
-    event.preventDefault();
-    installPrompt = event;
-  });
+/*
+  غيّر الرمز التالي قبل النشر.
+  هذا الرمز حماية محلية بسيطة فقط وليس نظام حسابات آمناً.
+*/
+const ADMIN_PIN = "2580";
 
-  btn.addEventListener("click", async function () {
-    if (installPrompt) {
-      installPrompt.prompt();
-      await installPrompt.userChoice;
-      installPrompt = null;
-    } else {
-      
-      );
-    }
-  });
+/*
+  التسعيرة التقديرية:
+  100 دج لأول كيلومترين، ثم 50 دج لكل كيلومتر إضافي.
+  عدّلها حسب التسعيرة التي تختارها.
+*/
+function calculatePrice(distance) {
+  const km = Math.max(0, Number(distance) || 0);
+  return Math.ceil(100 + Math.max(0, km - 2) * 50 / 50) * 50;
+}
 
-  window.addEventListener("appinstalled", function () {
-    btn.style.display = "none";
+const distanceInput = document.getElementById("distance");
+const priceOutput = document.getElementById("price");
+
+function updatePrice() {
+  priceOutput.textContent = calculatePrice(distanceInput.value);
+}
+
+distanceInput.addEventListener("input", updatePrice);
+updatePrice();
+
+function getOrders() {
+  try {
+    return JSON.parse(localStorage.getItem("iqdili_orders") || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function saveOrders(orders) {
+  localStorage.setItem("iqdili_orders", JSON.stringify(orders));
+}
+
+document.getElementById("orderForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const forbidden = /\b(tobacco|cigarette)\b/i;
+  const details = document.getElementById("details").value.trim();
+
+  if (forbidden.test(details) ||
+      details.includes("شمة") ||
+      details.includes("تبغ") ||
+      details.includes("سجائر")) {
+    alert("عذراً، طلبات التبغ والشمة والسجائر غير مقبولة.");
+    return;
+  }
+
+  const order = {
+    id: Date.now(),
+    customer: document.getElementById("customer").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    service: document.getElementById("service").value,
+    shop: document.getElementById("shop").value.trim(),
+    address: document.getElementById("address").value.trim(),
+    distance: Number(distanceInput.value),
+    details: details,
+    price: calculatePrice(distanceInput.value),
+    status: "جديد",
+    createdAt: new Date().toLocaleString("ar-DZ")
+  };
+
+  if (!order.customer || !order.phone || !order.shop ||
+      !order.address || !order.details) {
+    alert("يرجى ملء جميع المعلومات.");
+    return;
+  }
+
+  /*
+    التخزين محلي على نفس الجهاز فقط.
+    يلزم Firebase أو خادم لإرسال الطلبات إلى هاتف صاحب التطبيق.
+  */
+  const orders = getOrders();
+  orders.unshift(order);
+
+  try {
+    saveOrders(orders);
+  } catch {
+    alert("تعذر حفظ الطلب على هذا الجهاز.");
+    return;
+  }
+
+  document.getElementById("formMessage").textContent =
+    "تم حفظ الطلب على هذا الجهاز. هذا لا يعني أنه وصل إلى صاحب الخدمة.";
+  this.reset();
+  distanceInput.value = 2;
+  updatePrice();
+});
+
+function renderOrders() {
+  const list = document.getElementById("ordersList");
+  list.replaceChildren();
+
+  const orders = getOrders();
+
+  if (!orders.length) {
+    list.textContent = "لا توجد طلبات محفوظة على هذا الجهاز.";
+    return;
+  }
+
+  orders.forEach(order => {
+    const box = document.createElement("div");
+    box.className = "order";
+
+    const content = document.createElement("div");
+    content.textContent =
+      "رقم الطلب: " + order.id +
+      "\nالاسم: " + order.customer +
+      "\nالهاتف: " + order.phone +
+      "\nالخدمة: " + order.service +
+      "\nمكان الشراء: " + order.shop +
+      "\nعنوان التوصيل: " + order.address +
+      "\nالمسافة: " + order.distance + " كم" +
+      "\nالتفاصيل: " + order.details +
+      "\nالسعر التقديري: " + order.price + " دج" +
+      "\nالحالة: " + order.status +
+      "\nالتاريخ: " + order.createdAt;
+    content.style.whiteSpace = "pre-line";
+    box.appendChild(content);
+
+    const status = document.createElement("select");
+    ["جديد", "قيد التوصيل", "مكتمل", "ملغى"].forEach(value => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = value;
+      option.selected = order.status === value;
+      status.appendChild(option);
+    });
+
+    status.addEventListener("change", () => {
+      const all = getOrders();
+      const found = all.find(item => item.id === order.id);
+      if (found) {
+        found.status = status.value;
+        saveOrders(all);
+        renderOrders();
+      }
+    });
+
+    box.appendChild(status);
+    list.appendChild(box);
   });
-})();
-</script> 
+}
+
+document.getElementById("showOrdersBtn").addEventListener("click", () => {
+  if (document.getElementById("adminPin").value !== ADMIN_PIN) {
+    alert("رمز الدخول غير صحيح.");
+    return;
+  }
+  document.getElementById("ordersPanel").classList.remove("hidden");
+  renderOrders();
+});
+
+document.getElementById("hideOrdersBtn").addEventListener("click", () => {
+  document.getElementById("ordersPanel").classList.add("hidden");
+});
+
+document.getElementById("clearBtn").addEventListener("click", () => {
+  if (confirm("هل تريد حذف كل الطلبات المحفوظة على هذا الجهاز؟")) {
+    localStorage.removeItem("iqdili_orders");
+    renderOrders();
+  }
+});
+
+document.getElementById("exportBtn").addEventListener("click", () => {
+  const data = JSON.stringify(getOrders(), null, 2);
+  const blob = new Blob([data], {type:"application/json;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "iqdili-orders.json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+let installPrompt = null;
+const installBtn = document.getElementById("installBtn");
+const installMessage = document.getElementById("installMessage");
+
+window.addEventListener("beforeinstallprompt", event => {
+  event.preventDefault();
+  installPrompt = event;
+  installBtn.textContent = "تثبيت التطبيق على الهاتف";
+});
+
+installBtn.addEventListener("click", async () => {
+  if (installPrompt) {
+    installPrompt.prompt();
+    await installPrompt.userChoice;
+    installPrompt = null;
+    return;
+  }
+
+  installMessage.textContent =
+    "إذا لم يظهر خيار التثبيت، يجب تجهيز manifest.json و service-worker.js " +
+    "ونشر الموقع عبر HTTPS. بعض المتصفحات لا تدعم التثبيت المباشر.";
+});
+
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+  });
+}
+</script>
+
 </body>
-</html>
+      </html>
