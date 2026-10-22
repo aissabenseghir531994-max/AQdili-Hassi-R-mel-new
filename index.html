@@ -1,33 +1,42 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>اقضيلي حاسي الرمل</title>
+
 <style>
 body{font-family:Arial,sans-serif;background:#f3f5f7;margin:0;color:#222}
 header{background:#087f5b;color:white;padding:24px 15px;text-align:center}
-header h1{margin:0 0 8px}
 main{max-width:500px;margin:20px auto;padding:15px}
 .card{background:white;padding:20px;border-radius:14px;box-shadow:0 2px 8px #ddd}
 label{display:block;margin-top:14px;font-weight:bold}
 input,select,textarea{width:100%;box-sizing:border-box;padding:12px;margin-top:6px;border:1px solid #ccc;border-radius:8px;font-size:16px}
 button{width:100%;padding:14px;margin-top:18px;background:#087f5b;color:white;border:0;border-radius:8px;font-size:17px}
+button:disabled{opacity:.6}
 .note{text-align:center;color:#666;font-size:14px}
+#message{text-align:center;margin-top:15px;line-height:1.8}
 </style>
 </head>
+
 <body>
 <header>
 <h1>🛵 اقضيلي حاسي الرمل</h1>
 <p>خدمات التوصيل إلى غاية باب دارك</p>
 </header>
+
 <main>
 <div class="card">
 <h2>📦 اطلب توصيلك</h2>
+
 <form id="orderForm">
+
 <label>الاسم</label>
 <input id="name" required placeholder="اكتب اسمك">
+
 <label>رقم الهاتف</label>
 <input id="phone" type="tel" required placeholder="05 أو 06 أو 07">
+
 <label>نوع الطلب</label>
 <select id="type" required>
 <option value="">اختر نوع الطلب</option>
@@ -36,44 +45,118 @@ button{width:100%;padding:14px;margin-top:18px;background:#087f5b;color:white;bo
 <option>أدوية ومنتجات صيدلية</option>
 <option>وثائق وأغراض أخرى</option>
 </select>
+
 <label>ماذا تريد؟</label>
 <textarea id="details" required placeholder="اكتب تفاصيل طلبك"></textarea>
+
 <label>عنوان التوصيل</label>
 <input id="address" required placeholder="الحي والشارع">
+
 <label>ملاحظات إضافية (اختياري)</label>
 <textarea id="notes" placeholder="أي معلومات إضافية"></textarea>
-<button type="submit">إرسال الطلب</button>
+
+<button id="submitBtn" type="submit">إرسال الطلب</button>
 </form>
+
 <p class="note">خدمة التوصيل داخل حاسي الرمل فقط.</p>
 <p id="message" role="status"></p>
 </div>
 </main>
-<script>
-document.getElementById('orderForm').addEventListener('submit',function(e){
-e.preventDefault();
-const order={
-name:document.getElementById('name').value.trim(),
-phone:document.getElementById('phone').value.trim(),
-type:document.getElementById('type').value,
-details:document.getElementById('details').value.trim(),
-address:document.getElementById('address').value.trim(),
-notes:document.getElementById('notes').value.trim()
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCQ45cs4mo3HyjtWAyLbVsh0DglUosoiv0",
+  authDomain: "aqdili-hassi-r-mel.firebaseapp.com",
+  projectId: "aqdili-hassi-r-mel",
+  storageBucket: "aqdili-hassi-r-mel.firebasestorage.app",
+  messagingSenderId: "1098910384011",
+  appId: "1:1098910384011:web:4bdcfe04af98a0eff2398e",
+  measurementId: "G-TSTBHVWBNJ"
 };
-const text=`طلب جديد - اقضيلي حاسي الرمل\nالاسم: ${order.name}\nالهاتف: ${order.phone}\nالنوع: ${order.type}\nالطلب: ${order.details}\nالعنوان: ${order.address}\nملاحظات: ${order.notes}`;
-document.getElementById('message').textContent='تم تجهيز الطلب. اضغط إرسال في واتساب لإكمال الإرسال.';
-const url='https://wa.me/213671832087?text='+encodeURIComponent(text);
-const link=document.createElement('a');
-link.href=url;
-link.target='_blank';
-link.rel='noopener';
-link.textContent='اضغط هنا لإرسال الطلب';
-link.style.display='block';
-link.style.textAlign='center';
-link.style.marginTop='15px';
-link.style.fontWeight='bold';
-link.style.color='#087f5b';
-document.getElementById('message').replaceChildren(link);
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const form = document.getElementById("orderForm");
+const message = document.getElementById("message");
+const button = document.getElementById("submitBtn");
+
+form.addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const order = {
+    name: document.getElementById("name").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    type: document.getElementById("type").value,
+    details: document.getElementById("details").value.trim(),
+    address: document.getElementById("address").value.trim(),
+    notes: document.getElementById("notes").value.trim(),
+    status: "جديد",
+    createdAt: serverTimestamp()
+  };
+
+  const whatsappText =
+    `طلب جديد - اقضيلي حاسي الرمل\n` +
+    `الاسم: ${order.name}\n` +
+    `الهاتف: ${order.phone}\n` +
+    `النوع: ${order.type}\n` +
+    `الطلب: ${order.details}\n` +
+    `العنوان: ${order.address}\n` +
+    `ملاحظات: ${order.notes}`;
+
+  const whatsappURL =
+    "https://wa.me/213671832087?text=" +
+    encodeURIComponent(whatsappText);
+
+  button.disabled = true;
+  button.textContent = "جاري تسجيل الطلب...";
+  message.textContent = "";
+
+  try {
+    await addDoc(collection(db, "orders"), order);
+
+    message.textContent =
+      "✅ تم حفظ طلبك بنجاح! اضغط أدناه لإرساله عبر واتساب.";
+
+    message.style.color = "green";
+
+    const link = document.createElement("a");
+    link.href = whatsappURL;
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.textContent = "📲 إرسال الطلب عبر واتساب";
+    link.style.display = "block";
+    link.style.marginTop = "12px";
+    link.style.fontWeight = "bold";
+    link.style.color = "#087f5b";
+
+    message.appendChild(document.createElement("br"));
+    message.appendChild(link);
+
+    form.reset();
+
+  } catch (error) {
+    console.error(error);
+
+    message.textContent =
+      "❌ تعذر حفظ الطلب. تحقق من اتصال الإنترنت وإعدادات Firebase ثم حاول مجددًا.";
+
+    message.style.color = "red";
+
+  } finally {
+    button.disabled = false;
+    button.textContent = "إرسال الطلب";
+  }
 });
 </script>
 </body>
-  </html>
+</html>
