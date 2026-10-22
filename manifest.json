@@ -1,1 +1,24 @@
-
+{
+  "name": "اقضيلي حاسي الرمل",
+  "short_name": "اقضيلي",
+  "description": "خدمات التوصيل داخل حاسي الرمل",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/AQdili-Hassi-R-mel-new/",
+  "scope": "/AQdili-Hassi-R-mel-new/",
+  "display": "standalone",
+  "background_color": "#f3f5f7",
+  "theme_color": "#087f5b",
+  "icons": [
+    {
+      "src": "/AQdili-Hassi-R-mel-new/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/AQdili-Hassi-R-mel-new/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
