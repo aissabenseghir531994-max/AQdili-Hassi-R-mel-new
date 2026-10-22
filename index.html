@@ -293,5 +293,55 @@ form.addEventListener("submit", async function(e) {
   cursor: pointer;
   box-shadow: 0 4px 12px #0003;
 }
-  </body>
+<style>
+#installAppBtn {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  width: calc(100% - 24px);
+  padding: 16px;
+  background: #087f5b;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 99999;
+  box-shadow: 0 4px 12px #0003;
+}
+</style>
+
+<button id="installAppBtn" type="button">
+  📲 تثبيت تطبيق اقضيلي
+</button>
+
+<script>
+(function () {
+  const btn = document.getElementById("installAppBtn");
+  let installPrompt = null;
+
+  window.addEventListener("beforeinstallprompt", function (event) {
+    event.preventDefault();
+    installPrompt = event;
+  });
+
+  btn.addEventListener("click", async function () {
+    if (installPrompt) {
+      installPrompt.prompt();
+      await installPrompt.userChoice;
+      installPrompt = null;
+    } else {
+      alert(
+        "لتثبيت التطبيق، اضغط على ⋮ في Chrome ثم اختر تثبيت التطبيق أو إضافة إلى الشاشة الرئيسية."
+      );
+    }
+  });
+
+  window.addEventListener("appinstalled", function () {
+    btn.style.display = "none";
+  });
+})();
+</script> 
+</body>
 </html>
